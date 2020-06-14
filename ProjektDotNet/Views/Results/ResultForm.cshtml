@@ -1,0 +1,51 @@
+﻿@model ProjektDotNet.ViewModels.ResultFormViewModel
+@{
+    /**/
+
+    ViewBag.Title = Model.Title;
+}
+@*<h2>@Model.Title</h2>*@
+<h2>Zawody formulaż @Model.Name</h2>
+@using (Html.BeginForm("Save", "Results"))
+{
+    @Html.ValidationSummary(true, "Popraw błędy w polach")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateStart)
+        @Html.TextBoxFor(m => m.DateStart, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DateStart)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateEnd)
+        @Html.TextBoxFor(m => m.DateEnd, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DateEnd)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CompetitionId)
+        @Html.DropDownListFor(m => m.CompetitionId, new SelectList(Model.Competitions, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.CompetitionId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PlayerId)
+        @Html.DropDownListFor(m => m.PlayerId, new SelectList(Model.Players, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PlayerId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Place)
+        @Html.TextBoxFor(m => m.Place, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Place)
+    </div>
+
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

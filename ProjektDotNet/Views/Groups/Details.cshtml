@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ProjektDotNet.Models.Group>
+@*@model ProjektDotNet.Models.Group*@
+
+
+@{
+    ViewBag.Title = "Group";
+    //Layout = "~/Views/_ViewStart.cshtml";
+}
+
+
+<h2>Grupy Trenerów</h2>
+
+<table class="table table-bordered table-hover">
+    <p>
+        @Html.ActionLink("New Group", "New", "Groups", null, new { @class = "btn btn-primary" })
+
+    </p>
+
+    <thead>
+        <tr>
+            <th>Trener</th>
+            <th>Zawodnik</th>
+            <th>Data rozpoczeńcia</th>
+            <th>Data zakńczenia</th>
+            <th>Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var group in Model)
+        {
+            <tr>
+                @*<td>@Html.ActionLink("groups.Id", "Details", "Groups", new { id = group.Id }, null)</td>*@
+                @*<td>@Html.ActionLink(group.Id, "New", "Groups", new { id = group.Id }, null)</td>*@
+                <td>@group.Trainer.Name</td>
+                <td>@group.Player.Name</td>
+                <td>@group.DateStart.ToShortDateString() </td>
+                <td>@group.DateEnd </td>
+                <td>@group.Id</td>
+
+            </tr>
+        }
+</table>

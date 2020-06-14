@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ProjektDotNet.Models.Result>
+
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+<p>
+    @Html.ActionLink("Nowy wynik", "New", "Results", null, new { @class = "btn btn-primary" })
+</p>
+<table id="results" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>result</th>
+            <th>competitions</th>
+            <th>Pokaż</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in Model)
+        {
+            <tr>
+              @*  <td>@Html.ActionLink(result.Name, "Details", "Movies", new { id = result.Id }, null)</td>*@
+                <td>@Html.ActionLink(result.Name, "Edit", "Movies", new { id = result.Id }, null)</td>
+                <td>@result.Competition.Name</td>
+               </tr>
+                }
+           
+        </tbody>
+</table>
+@*@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#results").DataTable({
+                ajax: {
+                    url: "/api/results",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, result) {
+                            return "<a href='/results/edit/" + result.id + "'>" + result.name + "</a>";
+                        }
+                    },
+                    {
+                        data: "competition.name"
+                    },
+                    {
+                        data: "id",
+                        render: function(data) {
+                            return "<button class='btn-link js-delete' data-result-id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+
+            $("#movies").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this result?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/results/" + button.attr("data-result-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}*@

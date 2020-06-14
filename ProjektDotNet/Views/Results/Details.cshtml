@@ -1,0 +1,34 @@
+﻿@model ProjektDotNet.Models.Result
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Model.Name</h1>
+<div class="row col-4">
+    <h1 class="label-primary active row col-md-4">Nazwa: @Model.Name</h1>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Rodzaj: @Model.Competition.Name</h2>
+</div>
+
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Data rozpoczeńcia: @Model.DateStart.ToShortDateString()</h2>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Data zakończenia: @Model.DateEnd.ToShortDateString()</h2>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Miejsce: @Model.Place</h2>
+</div>
+
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Data dodania: @Model.DateAdded.ToShortDateString()</h2>
+</div>
+
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Data dodania: @Model.Competition.Name</h2>
+</div>
+
+
+

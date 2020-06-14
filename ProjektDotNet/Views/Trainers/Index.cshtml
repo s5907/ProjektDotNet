@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ProjektDotNet.Models.Trainer>
+
+
+@{
+    ViewBag.Title = "Trainers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Trenerzy</h2>
+<p>
+    @Html.ActionLink("Dodaj trenera", "New", "Trainers", null, new { @class = "btn btn-primary" })
+</p>
+
+<table id="trainers" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Trener</th>
+            <th>Dyscyplina</th>
+            <th>Klub</th>
+            <th>Zawodnik</th>
+            <th>Pokaż</th>
+            <th>Usuń</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#trainers").DataTable({
+                ajax: {
+                    url: "/api/trainers",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, trainer) {
+                            return "<a href='/trainers/edit/" + trainer.id + "'>" + trainer.name + "</a>";
+                        }
+                    },
+                    {
+                        data: "sportType.name"
+                    },
+                    {
+                        data: "sportType.club"
+                    },
+
+                    {
+                        data: "player.name"
+                    },
+                    {
+                        data: "id",
+                        render: function(data) {
+                            return "<button class='btn-link js-delete' data-trainer-id=" + data + ">Usuń</button>";
+                        }
+                    },
+
+                    {
+                        data: "name",
+                        render: function (data, type, trainer) {
+                            return "<a href='/trainers/details/" + trainer.id + "'>" + "więcej" + "</a>";
+                        }
+                    },
+                ]
+            });
+
+
+            $("#trainers").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Jesteś pewien że chcesz usunąć zawodnika?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/trainers/" + button.attr("data-trainer-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

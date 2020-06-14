@@ -1,0 +1,23 @@
+﻿@model ProjektDotNet.Models.Trainer
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Model.Name</h2>
+<div class="row col-4">
+    <h1 class="label-primary active row col-md-4">@Model.Name</h1>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Data urodzenia: @Model.Birthdate.Value.ToShortDateString()</h2>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Dyscyplina: @Model.SportType.Name</h2>
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Klub: @Model.SportType.Club</h2>
+
+</div>
+<div class="row col-4">
+    <h2 class="list-group-item list-group-item-action list-group-item-info col-md-4">Zawodnik: @Model.Player.Name</h2>
+</div>
+

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ProjektDotNet.Models.Player>
+
+
+@{
+    ViewBag.Title = "Players";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zawodnicy formulaż</h2>
+
+
+<table id="players" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Zawodnik</th>
+            <th>Dyscyplina</th>
+            <th>Klub</th>
+            <th>Trener</th>
+            
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#players").DataTable({
+                ajax: {
+                    url: "/api/players",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "sportType.name"
+                    },
+                    {
+                        data: "sportType.club"
+                    },
+
+                    {
+                        data: "sportType.coach"
+                    },
+                    
+                ]
+            });
+        });
+    </script>
+}

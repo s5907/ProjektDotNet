@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ProjektDotNet.Models.Result>
+
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Wyniki</h2>
+<p>
+    @Html.ActionLink("Dodaj zawody", "New", "Results", null, new { @class = "btn btn-primary" })
+</p>
+<table id="results" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th>Nazwa</th>
+            <th>Zawody</th>
+            <th>Zawodnik</th>
+            <th>Miejsce</th>
+            <th>Usuń</th>
+            <th>Pokaż</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#results").DataTable({
+                ajax: {
+                    url: "/api/results",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, result) {
+                            return "<a href='/results/edit/" + result.id + "'>" + result.name + "</a>";
+                        }
+                    },
+                   
+                    {
+                        data: "competition.name"
+                    },
+                    {
+                        data: "player.name"
+                    },
+                    {
+                        data: "place"
+                    },
+                    {
+                        data: "id",
+                        render: function(data) {
+                            return "<button class='btn-link js-delete' data-result-id=" + data + ">Usuń</button>";
+                        }
+                    },
+
+                    {
+                        data: "name",
+                        render: function (data, type, result) {
+                            return "<a href='/results/details/" + result.id + "'>" + "więcej" + "</a>";
+                        }
+                    },
+
+                ]
+            });
+
+
+            $("#results").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Jesteś pewien że chcesz usynąć wynik?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/results/" + button.attr("data-result-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

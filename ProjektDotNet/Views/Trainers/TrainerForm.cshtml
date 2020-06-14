@@ -1,0 +1,43 @@
+﻿@model ProjektDotNet.ViewModels.TrainerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Trener: @Model.Trainer.Name </h2>
+@using (Html.BeginForm("Save", "Trainers"))
+{
+    @Html.ValidationSummary(true, "Popraw błędy w polach")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Trainer)
+        @Html.TextBoxFor(m => m.Trainer.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Trainer.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Trainer.SportTypeId)
+        @Html.DropDownListFor(m => m.Trainer.SportTypeId, new SelectList(Model.SportTypes, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Trainer.SportTypeId)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Trainer.PlayerId)
+        @Html.DropDownListFor(m => m.Trainer.PlayerId, new SelectList(Model.Players, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Trainer.PlayerId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Trainer.Birthdate)
+        @Html.TextBoxFor(m => m.Trainer.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Trainer.Birthdate)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.Trainer.HasLicense) Posiada licencje?
+        </label>
+    </div>
+    @Html.HiddenFor(m => m.Trainer.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

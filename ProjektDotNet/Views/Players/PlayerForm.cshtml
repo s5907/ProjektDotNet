@@ -1,0 +1,40 @@
+﻿@model ProjektDotNet.ViewModels.PlayerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zawodnik: @Model.Player.Name </h2>
+
+@using (Html.BeginForm("Save", "Players"))
+{
+    @Html.ValidationSummary(true, "Popraw błędy w polach")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Player.Name)
+        @Html.TextBoxFor(m => m.Player.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Player.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Player.SportTypeId)
+        @Html.DropDownListFor(m => m.Player.SportTypeId, new SelectList(Model.SportTypes, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Player.SportTypeId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Player.Birthdate)
+        @Html.TextBoxFor(m => m.Player.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Player.Birthdate)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.Player.HasLicense) Posiada licencje?
+        </label>
+    </div>
+    @Html.HiddenFor(m => m.Player.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Zapisz</button>    
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

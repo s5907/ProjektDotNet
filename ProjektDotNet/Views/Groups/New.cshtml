@@ -1,0 +1,117 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "New Group Form";
+}
+
+<h2>Nowa grupa trenera</h2>
+<form id="newGroup">
+    <div class="form-group">
+        <label>Trener</label>
+        <div class="tt-container">
+            <input id="trainer" name="trainer" data-rule-validTrainer="true" required type="text" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Zawodnik</label>
+        <div class="tt-container">
+            <input id="player" name="player"  type="text" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            <ul id="players" class="list-group"></ul>
+        </div>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</form>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+
+        var vm = {
+            playerIds: []
+        };
+
+        var trainers = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/trainers?query=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('#trainer').typeahead({
+            minLength: 4,
+            highlight: true
+        }, {
+                name: 'trainers',
+            display: 'name',
+                source: trainers
+        }).on("typeahead:select", function (e, trainer) {
+            vm.trainerId = trainer.id;
+        });
+
+        var players = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/players?query=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('#player').typeahead({
+            minLength: 2,
+            highlight: true
+        }, {
+            name: 'players',
+            display: 'name',
+            source: players
+        }).on("typeahead:select", function (e, player) {
+            $("#players").append("<li class='list-group-item'>" + player.name + "</li>");
+
+            $("#player").typeahead("val", "");
+
+            vm.playerIds.push(player.id);
+        });
+
+        $.validator.addMethod("validTrainer", function () {
+            return vm.trainerId && vm.trainerId !== 0;
+        }, "Please select a valid Trainer.");
+
+        $.validator.addMethod("atLeastOneMovie", function () {
+            return vm.movieIds.length > 0;
+        }, "Please select at least one movie.");
+
+        var validator = $("#newGroup").validate({
+            submitHandler: function () {
+                $.ajax({
+                    url: "/api/newGroups",
+                    method: "post",
+                    data: vm
+                })
+                    .done(function () {
+                        toastr.success("Dodano zawodników do gupy.");
+
+                        $("#trainer").typeahead("val", "");
+                        $("#player").typeahead("val", "");
+                        $("#players").empty();
+
+                        vm = { playerIds: [] };
+
+                        validator.resetForm();
+                    })
+                    .fail(function () {
+                        toastr.error("Coś poszlo zle nie zapisano.");
+                    });
+
+                return false;
+            }
+        });
+    });
+</script>
+}
